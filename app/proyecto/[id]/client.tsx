@@ -77,7 +77,7 @@ export default function ProjectPageClient({ project, projectId }: { project: any
             <div className="flex items-center gap-2 text-sm">
               <LucideRefreshCcwDotIcon className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">Cotización del dia</span>
-              <span className="font-semibold text-foreground">1,00 u$ = $1.500,00</span>
+              <span className="font-semibold text-foreground">1,00 u$ = $1.450,00</span>
             </div>
           </div>
         </div>
