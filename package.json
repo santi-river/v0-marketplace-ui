@@ -2,6 +2,7 @@
   "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.12.1+sha512.f0dda8152d6c64c8e1a9f3f498dbb5856dbc3e1b0738bfbe958589e10cacf983349e45a0e1a0530d744c4fc94ec63e34c1c64d704e0bddd6e5e1b5ee9e49d3d3",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
