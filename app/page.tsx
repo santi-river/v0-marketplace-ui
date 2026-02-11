@@ -142,23 +142,23 @@ export default function MarketplacePage() {
         <div className="mx-auto max-w-7xl px-6 py-3">
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-4 flex-shrink-0">
-              <Image src="/cordoba-logo.png" alt="Córdoba" width={200} height={60} className="h-12 w-auto" />
+              <Image src="/cordoba-logo.jpg" alt="Córdoba" width={200} height={60} className="h-12 w-auto" />
               <Image
-                src="/ministerio-ambiente-logo.png"
+                src="/ministerio-ambiente-logo.jpg"
                 alt="Ministerio de Ambiente y Economía Circular"
                 width={220}
                 height={60}
                 className="h-14 w-auto"
               />
               <Image
-                src="/cambio-climatico-logo.png"
+                src="/cambio-climatico-logo.jpg"
                 alt="Secretaría de Cambio Climático"
                 width={180}
                 height={50}
                 className="h-10 w-auto"
               />
               <Image
-                src="/ecosystem-services-icons.png"
+                src="/ecosystem-services-icons.jpg"
                 alt="Servicios Ecosistémicos: Agua, Biodiversidad, CO2"
                 width={400}
                 height={80}
@@ -209,7 +209,7 @@ export default function MarketplacePage() {
                 generando co-beneficios significativos en 1, 2, 6 y 14.
               </p>
               <Image
-                src="/sdg-icons.png"
+                src="/sdg-icons.jpg"
                 alt="ODS: 13, 15, 17, 1, 2, 6, 14"
                 width={500}
                 height={60}
