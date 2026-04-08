@@ -142,23 +142,23 @@ export default function MarketplacePage() {
         <div className="mx-auto max-w-7xl px-6 py-3">
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-4 flex-shrink-0">
-              <Image src="/cordoba-logo.jpg" alt="Córdoba" width={200} height={60} className="h-12 w-auto" />
+              <Image src="/cordoba-logo.png" alt="Córdoba" width={200} height={60} className="h-12 w-auto" />
               <Image
-                src="/ministerio-ambiente-logo.jpg"
+                src="/ministerio-ambiente-logo.png"
                 alt="Ministerio de Ambiente y Economía Circular"
                 width={220}
                 height={60}
                 className="h-14 w-auto"
               />
               <Image
-                src="/cambio-climatico-logo.jpg"
+                src="/cambio-climatico-logo.png"
                 alt="Secretaría de Cambio Climático"
                 width={180}
                 height={50}
                 className="h-10 w-auto"
               />
               <Image
-                src="/ecosystem-services-icons.jpg"
+                src="/ecosystem-services-icons.png"
                 alt="Servicios Ecosistémicos: Agua, Biodiversidad, CO2"
                 width={400}
                 height={80}
@@ -209,7 +209,7 @@ export default function MarketplacePage() {
                 generando co-beneficios significativos en 1, 2, 6 y 14.
               </p>
               <Image
-                src="/sdg-icons.jpg"
+                src="/sdg-icons.png"
                 alt="ODS: 13, 15, 17, 1, 2, 6, 14"
                 width={500}
                 height={60}
@@ -220,7 +220,7 @@ export default function MarketplacePage() {
           <div className="flex items-center gap-2 text-sm flex-shrink-0">
             <LucideRefreshCcwDotIcon className="h-4 w-4 text-muted-foreground" />
             <span className="text-muted-foreground whitespace-nowrap">Cotización del dia</span>
-            <span className="font-semibold text-foreground whitespace-nowrap">1,00 u$ = $1.450,00</span>
+            <span className="font-semibold text-foreground whitespace-nowrap">1,00 u$ = $1.500,00</span>
           </div>
         </div>
 
