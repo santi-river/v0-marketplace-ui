@@ -12,6 +12,8 @@ import {
   MapPin,
   ChevronLeft,
   ChevronRight,
+  LogIn,
+  LogOut,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +22,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Image from "next/image"
 import { useState } from "react"
 import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context"
 
 const projects = [
   {
@@ -103,6 +106,7 @@ const projects = [
 ]
 
 export default function MarketplacePage() {
+  const { isAuthenticated, email, logout, isLoading } = useAuth()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
@@ -173,22 +177,45 @@ export default function MarketplacePage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm"></div>
 
-              <button className="relative">
-                <Bell className="h-5 w-5 text-muted-foreground" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive rounded-full text-[10px] text-white flex items-center justify-center">
-                  1
-                </span>
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <button className="relative">
+                    <Bell className="h-5 w-5 text-muted-foreground" />
+                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive rounded-full text-[10px] text-white flex items-center justify-center">
+                      1
+                    </span>
+                  </button>
 
-              <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8 bg-primary">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">EM</AvatarFallback>
-                </Avatar>
-                <div className="text-left">
-                  <div className="text-sm font-medium text-foreground">Empresa SA</div>
-                  <div className="text-xs text-muted-foreground">27-56232</div>
-                </div>
-              </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                        <Avatar className="h-8 w-8 bg-primary">
+                          <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
+                            {email ? email.substring(0, 2).toUpperCase() : "US"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="text-left">
+                          <div className="text-sm font-medium text-foreground">{email || "Usuario"}</div>
+                          <div className="text-xs text-muted-foreground">Comprador</div>
+                        </div>
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Cerrar sesión
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              ) : (
+                <Link href="/login">
+                  <Button className="gap-2 bg-[rgba(0,170,226,1)] hover:bg-primary/90 text-primary-foreground">
+                    <LogIn className="h-4 w-4" />
+                    Iniciar sesión
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
