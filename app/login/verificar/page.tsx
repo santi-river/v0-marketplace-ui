@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context"
 
 function VerificationContent() {
   const [code, setCode] = useState(["", "", "", "", "", ""])
@@ -15,6 +16,7 @@ function VerificationContent() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { login } = useAuth()
   const email = searchParams.get("email") || ""
 
   useEffect(() => {
@@ -71,11 +73,10 @@ function VerificationContent() {
     
     // Simulate verification
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Store auth state in localStorage (simulated)
-    localStorage.setItem("auth_email", email)
-    localStorage.setItem("auth_token", "simulated_token_" + Date.now())
-    
+
+    // Update auth context (also persists to localStorage) so the home reflects the session immediately
+    login(email)
+
     // Redirect to marketplace
     router.push("/")
   }

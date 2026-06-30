@@ -1,118 +1,87 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Minus, Plus } from "lucide-react"
+import { Minus, Plus, ArrowRight } from "lucide-react"
+import type { Zone } from "@/data/projects"
 
-type Project = {
-  id: number
-  badge: string
-  title: string
-  location: string
-  available: string
-  availableNumber: number
-  price: string
-  priceNumber: number
-  year: string
-  ambiente: string
-  image: string
-}
+const display = { fontFamily: "var(--font-manrope), system-ui, sans-serif" }
 
-export function PurchaseForm({ project, projectId }: { project: Project; projectId: string }) {
+export function PurchaseForm({ project, projectId }: { project: Zone; projectId: string }) {
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
 
-  useEffect(() => {
-    console.log("[v0] PurchaseForm mounted for project:", project.title)
-  }, [project])
-
-  const handleIncreaseQuantity = () => {
-    if (quantity < project.availableNumber) {
-      setQuantity(quantity + 1)
-    }
-  }
-
-  const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1)
-    }
-  }
-
   const handlePurchase = () => {
-    console.log("[v0] PurchaseForm - Navigating to payment with quantity:", quantity)
     router.push(`/proyecto/${projectId}/pago?quantity=${quantity}`)
   }
 
   const totalPrice = project.priceNumber * quantity
 
   return (
-    <div className="space-y-6">
-      <div className="bg-card rounded-lg p-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-foreground mb-4">Comprar Hectáreas</h2>
+    <div className="rounded-2xl border border-[#e6ece8] bg-white p-6 shadow-[0_18px_40px_-28px_rgba(12,53,39,0.4)]">
+      <h2 style={display} className="mb-5 text-xl font-bold text-[#16221c]">
+        Comprar hectáreas
+      </h2>
 
-        {/* Quantity Selector */}
-        <div className="mb-6">
-          <label className="text-sm font-medium text-foreground mb-3 block">Cantidad (Hectáreas)</label>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleDecreaseQuantity}
-              disabled={quantity <= 1}
-              className="h-10 w-10 bg-transparent"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <div className="flex-1 text-center">
-              <div className="text-3xl font-semibold text-foreground">{quantity}</div>
-              <div className="text-xs text-muted-foreground mt-1">Hectáreas</div>
-            </div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleIncreaseQuantity}
-              disabled={quantity >= project.availableNumber}
-              className="h-10 w-10"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="mt-3 text-center text-xs text-muted-foreground">
-            Máximo disponible: {project.availableNumber} Hectáreas
-          </div>
-        </div>
-
-        {/* Price Summary */}
-        <div className="p-4 bg-muted rounded-lg space-y-2 mb-6">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Precio por hectárea</span>
-            <span className="font-medium text-foreground">{project.price}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Cantidad</span>
-            <span className="font-medium text-foreground">{quantity} Hectáreas</span>
-          </div>
-          <div className="border-t border-border pt-2 mt-2">
-            <div className="flex items-center justify-between">
-              <span className="text-base font-semibold text-foreground">Total</span>
-              <span className="text-2xl font-bold text-foreground">${totalPrice.toFixed(2)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Purchase Button */}
+      {/* Quantity */}
+      <label className="mb-3 block text-sm font-semibold text-[#16221c]">Cantidad (hectáreas)</label>
+      <div className="flex items-center gap-4">
         <Button
-          onClick={handlePurchase}
-          className="w-full h-12 text-base hover:bg-primary/90 text-primary-foreground bg-[rgba(0,170,226,1)]"
+          variant="outline"
+          size="icon"
+          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+          disabled={quantity <= 1}
+          className="h-11 w-11 rounded-xl border-[#d4ddd7] bg-white"
         >
-          Comprar {quantity} Hectárea{quantity > 1 ? "s" : ""}
+          <Minus className="h-4 w-4" />
         </Button>
-
-        <p className="text-xs text-muted-foreground text-center mt-3">
-          Al hacer clic en "Comprar", aceptas nuestros términos y condiciones
-        </p>
+        <div className="flex-1 text-center">
+          <div style={display} className="text-3xl font-extrabold text-[#16221c]">{quantity}</div>
+          <div className="mt-0.5 text-xs text-[#5c6b63]">hectáreas</div>
+        </div>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setQuantity((q) => Math.min(project.availableNumber, q + 1))}
+          disabled={quantity >= project.availableNumber}
+          className="h-11 w-11 rounded-xl border-[#d4ddd7] bg-white"
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
       </div>
+      <div className="mt-3 text-center text-xs text-[#9aa8a0]">
+        Máximo disponible: {project.availableNumber.toLocaleString("es-AR")} hectáreas
+      </div>
+
+      {/* Summary */}
+      <div className="mt-6 space-y-2 rounded-2xl bg-[#f4f7f4] p-4">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-[#5c6b63]">Precio por hectárea</span>
+          <span className="font-medium text-[#16221c]">{project.price}</span>
+        </div>
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-[#5c6b63]">Cantidad</span>
+          <span className="font-medium text-[#16221c]">{quantity} ha</span>
+        </div>
+        <div className="mt-2 flex items-center justify-between border-t border-[#e0e6e2] pt-2">
+          <span className="text-base font-bold text-[#16221c]">Total</span>
+          <span style={display} className="text-2xl font-extrabold text-[#16553f]">{totalPrice.toFixed(2)} u$</span>
+        </div>
+      </div>
+
+      <Button
+        onClick={handlePurchase}
+        style={display}
+        className="mt-6 h-12 w-full gap-2 rounded-xl bg-[#16553f] text-base font-bold text-white hover:bg-[#114433]"
+      >
+        Comprar {quantity} hectárea{quantity > 1 ? "s" : ""}
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+
+      <p className="mt-3 text-center text-xs text-[#9aa8a0]">
+        Al continuar, aceptás los términos y condiciones del marketplace.
+      </p>
     </div>
   )
 }

@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-type PaymentMethod = "cordobesa" | "qr" | "debin" | "plataformas" | "credito" | "debito" | "efectivo" | null
+const display = { fontFamily: "var(--font-manrope), system-ui, sans-serif" }
+
+type PaymentMethod =
+  | "cordobesa" | "qr" | "debin" | "plataformas" | "credito" | "debito" | "efectivo" | null
 
 interface PaymentMethodSelectorProps {
   projectId: string
@@ -13,165 +16,89 @@ interface PaymentMethodSelectorProps {
   totalPrice: number
 }
 
+const featured = [
+  { id: "cordobesa", icon: Wallet, label: "Cordobesa", desc: "1 pago o 6 cuotas sin interés" },
+  { id: "qr", icon: Smartphone, label: "QR", desc: "Escaneá y pagá al instante" },
+  { id: "debin", icon: Building2, label: "DEBIN", desc: "Débito inmediato desde tu cuenta" },
+] as const
+
+const others = [
+  { id: "plataformas", icon: Wallet, label: "Plataformas de pago" },
+  { id: "credito", icon: CreditCard, label: "Tarjeta de crédito" },
+  { id: "debito", icon: CreditCard, label: "Tarjeta de débito" },
+  { id: "efectivo", icon: Banknote, label: "Efectivo" },
+] as const
+
 export function PaymentMethodSelector({ projectId, quantity, totalPrice }: PaymentMethodSelectorProps) {
   const router = useRouter()
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>(null)
 
-  console.log("[v0] PaymentMethodSelector mounted")
-
-  const handlePaymentMethodSelect = (method: PaymentMethod) => {
-    console.log("[v0] Payment method selected:", method)
-    setSelectedMethod(method)
-  }
-
   const handlePay = () => {
-    console.log("[v0] Navigating to success page")
     router.push(`/proyecto/${projectId}/exito?quantity=${quantity}`)
   }
 
+  const rowClass = (active: boolean) =>
+    `w-full flex items-center justify-between gap-3 rounded-2xl border bg-white p-4 text-left transition-all ${
+      active ? "border-[#16553f] ring-2 ring-[#16553f]/15" : "border-[#e6ece8] hover:border-[#cdd9d2] hover:bg-[#fafcfb]"
+    }`
+
   return (
     <>
-      {/* Featured Payment Methods */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Formas de pago destacadas</h2>
-        <div className="space-y-3">
-          <button
-            onClick={() => handlePaymentMethodSelect("cordobesa")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "cordobesa" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Wallet className="h-5 w-5 text-primary" />
+      {/* Featured */}
+      <h2 style={display} className="mb-3 text-sm font-bold uppercase tracking-wide text-[#5c6b63]">
+        Formas de pago destacadas
+      </h2>
+      <div className="space-y-3">
+        {featured.map((m) => {
+          const active = selectedMethod === m.id
+          return (
+            <button key={m.id} onClick={() => setSelectedMethod(m.id)} className={rowClass(active)}>
+              <div className="flex items-center gap-3">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-full ${active ? "bg-[#16553f] text-white" : "bg-[#eaf0ec] text-[#16553f]"}`}>
+                  <m.icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="font-semibold text-[#16221c]">{m.label}</div>
+                  <div className="text-sm text-[#5c6b63]">{m.desc}</div>
+                </div>
               </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">Cordobesa</div>
-                <div className="text-sm text-muted-foreground">1 pago o 6 cuotas sin interés</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-
-          <button
-            onClick={() => handlePaymentMethodSelect("qr")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "qr" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Smartphone className="h-5 w-5 text-primary" />
-              </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">QR</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-
-          <button
-            onClick={() => handlePaymentMethodSelect("debin")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "debin" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Building2 className="h-5 w-5 text-primary" />
-              </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">DEBIN</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-        </div>
+              <ChevronRight className="h-5 w-5 text-[#9aa8a0]" />
+            </button>
+          )
+        })}
       </div>
 
-      {/* Other Payment Methods */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Otras formas de pago</h2>
-        <div className="space-y-3">
-          <button
-            onClick={() => handlePaymentMethodSelect("plataformas")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "plataformas" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                <Wallet className="h-5 w-5 text-foreground" />
+      {/* Others */}
+      <h2 style={display} className="mb-3 mt-8 text-sm font-bold uppercase tracking-wide text-[#5c6b63]">
+        Otras formas de pago
+      </h2>
+      <div className="space-y-3">
+        {others.map((m) => {
+          const active = selectedMethod === m.id
+          return (
+            <button key={m.id} onClick={() => setSelectedMethod(m.id)} className={rowClass(active)}>
+              <div className="flex items-center gap-3">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-full ${active ? "bg-[#16553f] text-white" : "bg-[#f4f7f4] text-[#16221c]"}`}>
+                  <m.icon className="h-5 w-5" />
+                </div>
+                <div className="font-semibold text-[#16221c]">{m.label}</div>
               </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">Plataformas de pago</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-
-          <button
-            onClick={() => handlePaymentMethodSelect("credito")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "credito" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                <CreditCard className="h-5 w-5 text-foreground" />
-              </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">Tarjeta de crédito</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-
-          <button
-            onClick={() => handlePaymentMethodSelect("debito")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "debito" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                <CreditCard className="h-5 w-5 text-foreground" />
-              </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">Tarjeta de débito</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-
-          <button
-            onClick={() => handlePaymentMethodSelect("efectivo")}
-            className={`w-full flex items-center justify-between p-4 bg-card rounded-lg hover:bg-accent transition-colors ${
-              selectedMethod === "efectivo" ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                <Banknote className="h-5 w-5 text-foreground" />
-              </div>
-              <div className="text-left">
-                <div className="font-medium text-foreground">Efectivo</div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </button>
-        </div>
+              <ChevronRight className="h-5 w-5 text-[#9aa8a0]" />
+            </button>
+          )
+        })}
       </div>
 
-      {/* Pay Button - Only shown when payment method is selected */}
+      {/* Pay button */}
       {selectedMethod && (
-        <div className="fixed bottom-0 left-0 right-0 p-6 bg-background border-t border-border">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[#e6ece8] bg-white/95 p-4 backdrop-blur">
           <div className="mx-auto max-w-2xl">
             <Button
               onClick={handlePay}
-              className="w-full h-12 text-base hover:bg-primary/90 text-primary-foreground bg-primary"
+              style={display}
+              className="h-12 w-full rounded-xl bg-[#16553f] text-base font-bold text-white hover:bg-[#114433]"
             >
-              Pagar ${totalPrice.toFixed(2)}
+              Pagar {totalPrice.toFixed(2)} u$
             </Button>
           </div>
         </div>

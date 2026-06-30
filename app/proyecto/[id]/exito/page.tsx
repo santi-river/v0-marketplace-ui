@@ -29,7 +29,7 @@ export default async function SuccessPage({
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold text-foreground mb-4">Proyecto no encontrado</h1>
+          <h1 className="text-2xl font-semibold text-foreground mb-4">Zona no encontrada</h1>
           <Link href="/">
             <Button>Volver al Marketplace</Button>
           </Link>
